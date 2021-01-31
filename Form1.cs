@@ -13,6 +13,7 @@ namespace FileSender
 {
 	public partial class Form1 : Form
 	{
+		
 		public Form1()
 		{
 			InitializeComponent();
@@ -40,23 +41,16 @@ namespace FileSender
 				{
 					paths.Add(obj);
 				}
-
-				label1.Text += Environment.NewLine + string.Join("\n\r", paths);
+				label1.Text += string.Join(Environment.NewLine, paths) + Environment.NewLine;
 			}
 		}
 
-		private void panel1_DragLeave(object sender, EventArgs e)
-		{
-			//label1.Text = $"{Environment.NewLine}" ;
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-
-		}
-
+		
 		private void button2_Click(object sender, EventArgs e)
-		{
+		{			
+			
+			
+			string [] writePath = new string[] { };
 			
 		}
 	}
