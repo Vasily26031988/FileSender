@@ -57,7 +57,7 @@ namespace FileSender
 				{
 					paths.Add(obj);
 				}
-				label1.Text += string.Join(Environment.NewLine, paths) +" ";
+				label1.Text +=  string.Join(Environment.NewLine, paths) +" ";
 				
 				//Path = string.Join(Environment.NewLine, paths) + " ";
 				Regex regex = new Regex(@"\r\n", RegexOptions.Multiline);
@@ -73,27 +73,18 @@ namespace FileSender
 						Path = regexReplacement.Replace(label1.Text, target);
 					}
 				}
-
-
 				//label1.Text += $@"{string.Join("\n\r", paths)} ";
 				//MessageBox.Show(Path);
 				//Path = label1.Text;
 				//Path = string.Join(Environment.NewLine, paths) + Environment.NewLine; 
 			}
 		}
-		private void button2_Click(object sender, EventArgs e)
+		
+		
+		private async void button2_Click(object sender, EventArgs e)
 		{
-
-			//StreamReader file = new StreamReader(Path, Encoding.Default);
-			//string str = file.ReadToEnd();
-
-			string[] readPaths = File.ReadAllLines(Path, Encoding.Default);
-
-
-
-
+			await Task.Run(UploadSample);
 		}
-
 		async Task UploadSample()
 		{
 			//You should have oauth token from Yandex Passport.
@@ -109,6 +100,7 @@ namespace FileSender
 				localFile: @"C:\myfile.txt",
 				cancellationToken: CancellationToken.None);
 		}
+
 
 		private void button1_Click(object sender, EventArgs e)
 		{
