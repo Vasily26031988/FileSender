@@ -89,22 +89,19 @@ namespace FileSender
 		{
 			//You should have oauth token from Yandex Passport.
 			//See https://tech.yandex.ru/oauth/
-			string oauthToken = "<token hear>";
+			string oauthToken = "AgAAAAA73AsNAAbb-yeI1Z1NmUCnsEp5fs84agI";
 
 			// Create a client instance
 			IDiskApi diskApi = new DiskHttpApi(oauthToken);
 
 			//Upload file from local
-			await diskApi.Files.UploadFileAsync(path: "/foo/myfile.txt",
+			await diskApi.Files.UploadFileAsync(path: $@"123.txt",
 				overwrite: false,
-				localFile: @"C:\myfile.txt",
+				localFile: @"C:\Users\gololobovVV\Desktop\папка\123.txt",
 				cancellationToken: CancellationToken.None);
 		}
 
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-
-		}
+		
 	}
 }
