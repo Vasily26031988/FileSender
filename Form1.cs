@@ -71,6 +71,7 @@ namespace FileSender
 						string target = " ";
 						Regex regexReplacement = new Regex(pattern);
 						Path = regexReplacement.Replace(label1.Text, target);
+						
 					}
 				}
 				//label1.Text += $@"{string.Join("\n\r", paths)} ";
@@ -87,9 +88,16 @@ namespace FileSender
 		}
 		async Task UploadSample()
 		{
+
+			
+			
+			
+	
+			
+
 			//You should have oauth token from Yandex Passport.
 			//See https://tech.yandex.ru/oauth/
-			string oauthToken = "AgAAAAA73AsNAAbb-yeI1Z1NmUCnsEp5fs84agI";
+			string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
 
 			// Create a client instance
 			IDiskApi diskApi = new DiskHttpApi(oauthToken);
