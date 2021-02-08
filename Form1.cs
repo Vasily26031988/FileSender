@@ -45,8 +45,24 @@ namespace FileSender
 		private void panel1_DragDrop(object sender, DragEventArgs e)
 		{
 
-			List<string> paths = new List<string>();
+			string path;
+			if (File.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\source\repos\FileSender\TempReadedFileOfPath.txt"))
+			{
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);			
+			}
+			else if (File.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\source\repos\FileSender\TempReadedFileOfPath.txt"))
+			{
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+			}
+			else
+			{
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+			}
+					
+			StreamWriter stream = new StreamWriter("");
 
+			
+			List<string> paths = new List<string>();
 			foreach (string obj in (e.Data.GetData(DataFormats.FileDrop) as string[]))
 			{
 				if (Directory.Exists(obj))
@@ -57,43 +73,68 @@ namespace FileSender
 				{
 					paths.Add(obj);
 				}
-				label1.Text +=  string.Join(Environment.NewLine, paths) +" ";
-				
-				//Path = string.Join(Environment.NewLine, paths) + " ";
+				label1.Text += string.Join(Environment.NewLine, paths) + " ";
+
+
+
 				Regex regex = new Regex(@"\r\n", RegexOptions.Multiline);
 				MatchCollection matches = regex.Matches(label1.Text);
-				if (matches.Count>0)
+				if (matches.Count > 0)
 				{
 					foreach (var match in matches)
 					{
+
 						//Path = string.Join(Environment.NewLine, paths) + " ";
 						string pattern = @"\r\n";
 						string target = " ";
 						Regex regexReplacement = new Regex(pattern);
 						Path = regexReplacement.Replace(label1.Text, target);
-						
+
+
+
 					}
 				}
-				//label1.Text += $@"{string.Join("\n\r", paths)} ";
-				//MessageBox.Show(Path);
-				//Path = label1.Text;
-				//Path = string.Join(Environment.NewLine, paths) + Environment.NewLine; 
+
+
 			}
+
 		}
-		
-		
-		private async void button2_Click(object sender, EventArgs e)
+
+			
+
+		private void button2_Click(object sender, EventArgs e)
 		{
-			await Task.Run(UploadSample);
+			ReadDirectory();
+
 		}
+
+
+
+		void ReadDirectory()
+		{
+			string path = @"C:\Users\gololobovVV\Desktop\папка";
+
+			//foreach (string dir in Directory.GetDirectories(path))
+			//{
+			foreach (string file in Directory.GetFiles(path))
+			{
+				label3.Text += file + "\n";
+
+				File.ReadAllLines(label3.Text);
+
+			}
+			//}
+
+		}
+
+
 		async Task UploadSample()
 		{
 
-			
-			
-			
-	
-			
+
+
+
+
 
 			//You should have oauth token from Yandex Passport.
 			//See https://tech.yandex.ru/oauth/
@@ -110,6 +151,6 @@ namespace FileSender
 		}
 
 
-		
+
 	}
 }
