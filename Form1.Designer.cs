@@ -89,6 +89,7 @@ namespace FileSender
 			this.Controls.Add(this.panel1);
 			this.Name = "Form1";
 			this.Text = "File Sender";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

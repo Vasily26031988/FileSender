@@ -19,13 +19,19 @@ namespace FileSender
 	public partial class Form1 : Form
 	{
 		private string _path;
+		private string _matchPattern;
 
 		public string Path
 		{
-			get { return _path; }
-			set { _path = value; }
+			get => _path;
+			set => _path = value;
 		}
 
+		public string MatchPAttern
+		{
+			get => _matchPattern;
+			set => _matchPattern = value;
+		}
 
 		public Form1()
 		{
@@ -90,55 +96,61 @@ namespace FileSender
 		}
 
 
-
-
-
 		private void button2_Click(object sender, EventArgs e)
 		{
-			ReadDirectory();
-		}
-
-
-
-		void ReadDirectory()
-		{
-			StreamReader readedPaths = new StreamReader(Path);
-			string[] readPaths = File.ReadAllLines(Path);
-			readedPaths.Close();
-
-
-			//foreach (string dir in Directory.GetDirectories(path))
-			//{
-			foreach (string file in Directory.GetFiles(""))
-			{
-				//label3.Text += file + "\n";
-
-				//File.ReadAllLines(label3.Text);
-
-			}
-			//}
-
+			UploadSample();
 		}
 
 
 		async Task UploadSample()
 		{
+			StreamReader readedPaths = new StreamReader(Path);
+			string[] arrayPaths = File.ReadAllLines(Path);
+			readedPaths.Close();
 
-			//You should have oauth token from Yandex Passport.
-			//See https://tech.yandex.ru/oauth/
-			string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
+			foreach (string item in arrayPaths)
+			{
 
-			// Create a client instance
-			IDiskApi diskApi = new DiskHttpApi(oauthToken);
+				string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
+				IDiskApi diskApi = new DiskHttpApi(oauthToken);
 
-			//Upload file from local
-			await diskApi.Files.UploadFileAsync(path: $@"123.txt",
-				overwrite: false,
-				localFile: @"C:\Users\sator\Desktop\123.txt",
-				cancellationToken: CancellationToken.None);
+
+				Regex regex = new Regex(
+					@"[^\\]*$",
+					RegexOptions.IgnoreCase
+					| RegexOptions.CultureInvariant
+					| RegexOptions.IgnorePatternWhitespace
+					| RegexOptions.Compiled
+				);
+				MatchCollection matches = regex.Matches(item);
+
+				foreach (var match in matches)
+				{
+					MatchPAttern = match.ToString();
+
+					await diskApi.Files.UploadFileAsync(path: MatchPAttern,
+					overwrite: false,
+					localFile: item,
+					cancellationToken: CancellationToken.None);
+				}
+			}
 		}
 
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			try
+			{
+				if (Path != null)
+				{
+					File.Delete(Path);
+				}
 
-
+			}
+			catch (Exception exception)
+			{
+				MessageBox.Show(@"Что-то пошло не так.");
+				throw;
+			}
+		}
 	}
 }
