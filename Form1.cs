@@ -102,37 +102,46 @@ namespace FileSender
 		}
 
 
-		async Task UploadSample()
+		async void UploadSample()
 		{
-			StreamReader readedPaths = new StreamReader(Path);
-			string[] arrayPaths = File.ReadAllLines(Path);
-			readedPaths.Close();
+			string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
+			IDiskApi diskApi = new DiskHttpApi(oauthToken);
 
-			foreach (string item in arrayPaths)
+			try
 			{
-
-				string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
-				IDiskApi diskApi = new DiskHttpApi(oauthToken);
-
-
-				Regex regex = new Regex(
-					@"[^\\]*$",
-					RegexOptions.IgnoreCase
-					| RegexOptions.CultureInvariant
-					| RegexOptions.IgnorePatternWhitespace
-					| RegexOptions.Compiled
-				);
-				MatchCollection matches = regex.Matches(item);
-
-				foreach (var match in matches)
+				using (StreamReader readedPaths = new StreamReader(Path))
 				{
-					MatchPAttern = match.ToString();
+					string[] arrayPaths = File.ReadAllLines(Path);
+					//readedPaths.Close();
 
-					await diskApi.Files.UploadFileAsync(path: MatchPAttern,
-					overwrite: false,
-					localFile: item,
-					cancellationToken: CancellationToken.None);
+					foreach (string item in arrayPaths)
+					{
+						Regex regex = new Regex(
+							@"[^\\]*$",
+							RegexOptions.IgnoreCase
+							| RegexOptions.CultureInvariant
+							| RegexOptions.IgnorePatternWhitespace
+							| RegexOptions.Compiled
+						);
+						MatchCollection matches = regex.Matches(item);
+
+						foreach (var match in matches)
+						{
+							await Task.Run(() =>
+							{
+								diskApi.Files.UploadFileAsync(path: match.ToString(),
+								overwrite: true,
+								localFile: item,
+								cancellationToken: CancellationToken.None);								
+							});
+						}
+					}
 				}
+			}
+			catch (Exception)
+			{
+				MessageBox.Show("Возникла ошибка. \n" +
+					"Закройте программу, затем откройте, перенесите файлы в форму и вновь попытайтесь отправить файлы.");
 			}
 		}
 
@@ -144,12 +153,10 @@ namespace FileSender
 				{
 					File.Delete(Path);
 				}
-
 			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 				MessageBox.Show(@"Что-то пошло не так.");
-				throw;
 			}
 		}
 	}
