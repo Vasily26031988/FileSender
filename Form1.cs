@@ -66,29 +66,29 @@ namespace FileSender
 
 		void RecordPaths()
 		{
-			if (File.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\source\repos\FileSender\TempReadedFileOfPath.txt"))
-			{
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\source\repos\FileSender\TempReadedFileOfPath.txt";
-				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+			if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender"))
+			{							
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);				
 				StreamWriter stream = new StreamWriter(file);
+				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt";
 				stream.WriteLine(label1.Text);
 				stream.Close();
 				file.Close();
 			}
-			else if (File.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\source\repos\FileSender\TempReadedFileOfPath.txt"))
+			else if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender"))
 			{
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\source\repos\FileSender\TempReadedFileOfPath.txt";
-				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
 				StreamWriter stream = new StreamWriter(file);
+				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt";
 				stream.WriteLine(label1.Text);
 				stream.Close();
 				file.Close();
 			}
 			else
-			{
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt";
-				FileStream file = new FileStream(Path, FileMode.OpenOrCreate);
+			{				
+				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
 				StreamWriter stream = new StreamWriter(file);
+				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt";
 				stream.WriteLine(label1.Text);
 				stream.Close();
 				file.Close();
@@ -130,7 +130,7 @@ namespace FileSender
 							await Task.Run(() =>
 							{
 								diskApi.Files.UploadFileAsync(path: match.ToString(),
-								overwrite: true,
+								overwrite: false,
 								localFile: item,
 								cancellationToken: CancellationToken.None);								
 							});
