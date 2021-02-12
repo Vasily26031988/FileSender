@@ -66,33 +66,42 @@ namespace FileSender
 
 		void RecordPaths()
 		{
-			if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender"))
-			{							
-				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);				
-				StreamWriter stream = new StreamWriter(file);
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt";
-				stream.WriteLine(label1.Text);
-				stream.Close();
-				file.Close();
-			}
-			else if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender"))
+			try
 			{
-				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
-				StreamWriter stream = new StreamWriter(file);
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt";
-				stream.WriteLine(label1.Text);
-				stream.Close();
-				file.Close();
+				if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender"))
+				{
+					FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+					StreamWriter stream = new StreamWriter(file);
+					Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\FileSender\TempReadedFileOfPath.txt";
+					stream.WriteLine(label1.Text);
+					stream.Close();
+					file.Close();
+				}
+				else if (Directory.Exists($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender"))
+				{
+					FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+					StreamWriter stream = new StreamWriter(file);
+					Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\FileSender\TempReadedFileOfPath.txt";
+					stream.WriteLine(label1.Text);
+					stream.Close();
+					file.Close();
+				}
+				else
+				{
+					FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
+					StreamWriter stream = new StreamWriter(file);
+					Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt";
+					stream.WriteLine(label1.Text);
+					stream.Close();
+					file.Close();
+				}
+
 			}
-			else
-			{				
-				FileStream file = new FileStream($@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt", FileMode.OpenOrCreate);
-				StreamWriter stream = new StreamWriter(file);
-				Path = $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\source\repos\FileSender\TempReadedFileOfPath.txt";
-				stream.WriteLine(label1.Text);
-				stream.Close();
-				file.Close();
+			catch (Exception)
+			{
+				MessageBox.Show("Возникла ошибка. Поместите директорию с программой на рабочий стол или в стандартный путь репозитория");				
 			}
+			
 		}
 
 
@@ -157,7 +166,7 @@ namespace FileSender
 			}
 			catch (Exception)
 			{
-				MessageBox.Show(@"Что-то пошло не так.");
+				MessageBox.Show("Что-то пошло не так.");
 			}
 		}
 	}
