@@ -1,4 +1,0 @@
-C:\Users\gololobovVV\Desktop\папка\123.txt
-C:\Users\gololobovVV\Desktop\папка\456.txt
-C:\Users\gololobovVV\Desktop\папка\789.txt
-

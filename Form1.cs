@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,6 +15,8 @@ using System.Windows.Forms;
 using YandexDisk.Client;
 using YandexDisk.Client.Clients;
 using YandexDisk.Client.Http;
+using System.Runtime.InteropServices;
+using YandexDisk.Client.Protocol;
 
 namespace FileSender
 {
@@ -95,13 +99,11 @@ namespace FileSender
 					stream.Close();
 					file.Close();
 				}
-
 			}
 			catch (Exception)
 			{
-				MessageBox.Show("Возникла ошибка. Поместите директорию с программой на рабочий стол или в стандартный путь репозитория");				
+				MessageBox.Show("Возникла ошибка. Поместите директорию с программой на рабочий стол или в стандартный путь репозитория");
 			}
-			
 		}
 
 
@@ -113,15 +115,18 @@ namespace FileSender
 
 		async void UploadSample()
 		{
+			int countFiles;
 			string oauthToken = "AgAAAAA73AsNAAbb-2RXKmyTy0OjuGEcU7nvJHA";
 			IDiskApi diskApi = new DiskHttpApi(oauthToken);
 
+			
 			try
 			{
 				using (StreamReader readedPaths = new StreamReader(Path))
 				{
 					string[] arrayPaths = File.ReadAllLines(Path);
-					//readedPaths.Close();
+					countFiles = arrayPaths.Length-1;
+					progressBar1.Maximum = countFiles;
 
 					foreach (string item in arrayPaths)
 					{
@@ -139,11 +144,18 @@ namespace FileSender
 							await Task.Run(() =>
 							{
 								diskApi.Files.UploadFileAsync(path: match.ToString(),
-								overwrite: false,
-								localFile: item,
-								cancellationToken: CancellationToken.None);								
+									overwrite: false,
+									localFile: item,
+									cancellationToken: CancellationToken.None);
 							});
 						}
+					}
+
+					for (int i = countFiles; i > 0; i--)
+					{
+						label4.Text += arrayPaths[i-1] + Environment.NewLine;
+						progressBar1.Value++;
+						await Task.Delay(100);
 					}
 				}
 			}
