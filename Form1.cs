@@ -166,7 +166,6 @@ namespace FileSender
 			}
 		}
 
-
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			try
