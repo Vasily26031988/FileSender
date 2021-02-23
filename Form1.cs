@@ -150,7 +150,6 @@ namespace FileSender
 							});
 						}
 					}
-
 					for (int i = countFiles; i > 0; i--)
 					{
 						label4.Text += arrayPaths[i-1] + Environment.NewLine;
